@@ -10,11 +10,55 @@
                     @endif
 
  <!DOCTYPE html>
+
  <div class='row justify-content-around mt-3'>
-        <a href="{{url('articles/create')}}">
+        <a href="{{route('posts.create')}}">
             <button type='button' class='btn btn-primary'>新規投稿ページ</button>
        </a></div> 
- <p>ppp</p>
+
+       <div class='row justify-content-around mt-3'>
+       <a href="{{url('posts')}}">
+            <button type='button' class='btn btn-primary'>リスト確認</button>
+       </a></div> 
+
+       <div class='row justify-content-around mt-3'>
+       <a href="{{ route('mypages.index')}}">
+            <button type='button' class='btn btn-primary'>マイページ</button>
+       </a></div> 
+
+
+                
+
+     @if(count($posts) > 0)
+  @foreach($posts as $post)
+    <a href="/posts/{{$post->id}}">
+      <div class="card my-3">
+        <div class="card-body">
+          <h5 class="card-title">{{$post->title}}</h5>
+          <small>投稿日:{{($post->created_at)->format('Y/m/d')}}</small><br/>
+          <small>更新日:{{($post->updated_at)->format('Y/m/d')}}</small>
+          <p class="card-text">{{$post->image_path}}</p>
+          <p class="card-text">{{$post->feelings}}</p>
+        </div>
+
+        <a href="{{ route('like', $post) }}" class="btn btn-secondary btn-sm">
+                    いいねをつける 
+                    <span class="badge">{{ $post->likes_count}}</span>
+                </a>
+
+      </div>
+    </a>
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
+@endif
+  
+
+
+
+ 
 <html lang="en">
     <head>
         <meta charset="utf-8" />
@@ -26,9 +70,13 @@
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
+
+        <meta name="csrf-token" content="{{ csrf_token() }}">
     </head>
     <body>
      
+   
+
         <!-- Page header with logo and tagline-->
         <header class="py-5 bg-light border-bottom mb-4">
             <div class="container">
@@ -149,10 +197,7 @@
                         </div>
                     </div>
                     <!-- Side widget-->
-                    <div class="card mb-4">
-                        <div class="card-header">Side Widget</div>
-                        <div class="card-body">You can put anything you want inside of these side widgets. They are easy to use, and feature the Bootstrap 5 card component!</div>
-                    </div>
+                   
                 </div>
             </div>
         </div>
@@ -165,10 +210,24 @@
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
     </body>
+
+<style>
+.liked {
+  color: pink;
+}
+</style>
+
+
+
+    
 </html>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+
+
 @endsection

@@ -6,9 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class posts extends Model
 {
-    protected $fillable = ['title','feelings'];
+    
+    //後でViewで使う、いいねされているかを判定するメソッド。
+   
 
-    public function type(){
-        return $this->belongsTo('App\users','user_id','id');
+
+    protected $fillable = ['title',"image_path",'feelings','filename'];
+
+    public function user()
+    {
+        //Userモデルのデータを取得する
+        return $this->belongsTo('App\User');
     }
+
+    public function likes(){
+        return $this->hasMany('App\Like');
+    }
+    
 }

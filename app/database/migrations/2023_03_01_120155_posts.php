@@ -19,6 +19,7 @@ class Posts extends Migration
             $table->string('title','30');
             $table->string('image_path','100');
             $table->string('feelings','500');
+            $table->string('image_path','100');
             $table->timestamps();
         });
     }

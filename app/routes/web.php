@@ -1,5 +1,10 @@
 <?php
-use App\Http\Controllers\ArticleController;
+
+//use App\Http\Controllers\PasswordController;
+
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\MypageController;
+use App\Http\Controllers\LikeController;
 
 
 
@@ -22,8 +27,22 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::group(['middleware'=>'auth'],function(){
+
 Route::get('/home', 'HomeController@index')->name('home');
 
+//Route::get('/', [PasswordController::class, 'emailFormResetPassword'])->name('form');
+// メール送信処理
 
 //resourcecontroller
-Route::resource('articles', 'ArticleController'); 
+Route::resource('posts', 'PostController'); 
+
+
+Route::resource('mypages', 'MypageController');
+});
+
+//いいねを付ける
+Route::get('/like/{post}','LikeController@like')->name('like');
+
+//いいねを表示するページ
+Route::get('/','LikeController@index');

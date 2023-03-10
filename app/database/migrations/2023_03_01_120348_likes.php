@@ -15,8 +15,8 @@ class Likes extends Migration
     {
         Schema::create('likes', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->tinyInteger('user_id');
-            $table->tinyInteger('post_id');
+            $table->unsignedBigInteger('post_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->timestamps();
         });
     }
