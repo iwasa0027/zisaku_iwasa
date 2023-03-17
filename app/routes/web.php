@@ -41,8 +41,6 @@ Route::resource('posts', 'PostController');
 Route::resource('mypages', 'MypageController');
 });
 
-//いいねを付ける
-Route::get('/like/{post}','LikeController@like')->name('like');
+Route::post('/like', 'LikeController@like');
 
-//いいねを表示するページ
-Route::get('/','LikeController@index');
+Route::get('/bookmarks', [PostController::class, 'bookmark_articles'])->name('bookmarks');

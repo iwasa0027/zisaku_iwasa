@@ -21,6 +21,11 @@
     </div>
 
     <div class="form-group">
+   <label for="exampleFormControlInput1">タグ</label>
+   <input type="text" name="tags" value="{{old('tags')}}">
+ </div>
+
+    <div class="form-group">
     <label for="exampleFormControlTextarea1">本文</label>
       <textarea class="form-control"rows="5" name="feelings"></textarea>
     </div>

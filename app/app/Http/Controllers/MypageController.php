@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Mypage;
 use App\User;
+use App\Post;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+
 
 use Illuminate\Support\Facades\Auth;
 
@@ -18,9 +19,10 @@ class MypageController extends Controller
      */
     public function index()
     {
-        $id =Auth::id();
-        $mypage=DB::table('users')->find($id);
-        return view("mypages.mypage")->with(['mypage' => $mypage ]);
+        $post=Post::where('user_id',Auth::id())->get();//自分のみのを持ってくる
+        $mypage =Auth::user();
+       
+        return view("mypages.mypage",['mypage' => $mypage,'posts'=>$post ]);
 
     }
 
@@ -69,7 +71,9 @@ class MypageController extends Controller
      */
     public function edit(User $mypage)
     {
-        return view('mypages.mypage_edit')->with('mypage', $mypage);
+        $post=Post::where('user_id',Auth::id())->get();//自分のみのを持ってくる
+        $mypage=Auth::user();
+        return view('/mypages.mypage_edit',['mypage' => $mypage,'posts'=>$post,'auth'=>$mypage ]);
     }
 
     /**
@@ -81,24 +85,44 @@ class MypageController extends Controller
      */
     public function update(Request $request, User $mypage)
     {
-        // ディレクトリ名
-        //  $dir = 'userimages';
-        //  // imagesディレクトリに画像を保存
-        //  //$request->file('image_path')->store('public/' . $dir);
 
-        // // アップロードされたファイル名を取得
-        // $file_name = $request->file('image')->getClientOriginalName();
-        // // 取得したファイル名で保存
-        // $request->file('image')->storeAs('public/' . $dir, $file_name);
-        // $mypage->filename = $file_name;
-        // $mypage->image_path = 'storage/' . $dir . '/' . $file_name;
+// 対象レコード取得
+
+// $mypage= User::find($mypage);
+
+// // リクエストデータ受取
+
+// $form = $request->all();
+
+// // フォームトークン削除
+
+// unset($form['_token']);
 
 
-        //$mypage->image = $request->image;
+    
+        // // ディレクトリ名
+           $dir = 'userimages';
+        // //  // imagesディレクトリに画像を保存
+          // $request->file('image')->store('public/' . $dir);
+
+        // // // アップロードされたファイル名を取得
+         $file_name = $request->file('image')->getClientOriginalName();
+        // // // 取得したファイル名で保存
+          $request->file('image')->storeAs('public/' . $dir, $file_name);
+         $mypage->filename = $file_name;
+          $mypage->image = 'storage/' . $dir . '/' . $file_name;
+
+
+       
+        
+        $mypage->password = $request->password;
+        $mypage->name= $request->name;
+        $mypage->email = $request->email;
         $mypage->profile = $request->profile;
+    
 
         $mypage->save();
-        return redirect("mypages.mypage");
+        return redirect("/mypages");
     }
 
     /**
@@ -109,6 +133,9 @@ class MypageController extends Controller
      */
     public function destroy(User $mypage)
     {
-        //
+        
+            $mypage->delete();
+            return redirect('/login');
+        
     }
 }

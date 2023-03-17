@@ -9,26 +9,49 @@
 
 
 <div class="profile_box">
-<div class="box-title">マイページ</div>
-<div class="profile_center">
-<p class="card-text"><img src="{{ asset('storage/images/IMG_3894.JPG') }}" alt="" class="profile_figure"></p>
+    <div class="box-title">マイページ</div>
+    <div class="profile_center">
+        <p class="card-text"><img src="{{ asset($mypage->image)}}" alt="....." class="profile_figure"></p>
 
-<div class="profile_name">名前</div></div>
-<p>プロフィール<br>{{ $mypage->profile }}</p>
-<!-- <p class="profile_center" name="profile" placeholder="感想やご意見" cols="50" rows="20" /></p> -->
+        <div class="profile_name"><span>{{$mypage->name}}</span></div><br>
+    </div>
+        <div class="profile_name"><span>プロフィール</span></div><br>
+        <div class="profile_name"><span>{{$mypage->profile}}</span></div><br>
+        <!-- <p class="profile_center" name="profile" placeholder="感想やご意見" cols="50" rows="20" /></p> -->
 
 
 
-<div class='row justify-content-around mt-3'>
-        <a href="{{route('articles.create')}}">
+        <div class='row justify-content-around mt-3'>
+        <a href="{{route('posts.create')}}">
             <button type='button' class='btn btn-primary'>新規投稿ページ</button>
        </a></div> 
 
        <div class='row justify-content-around mt-3'>
-        <a href="{{route('mypages.edit',auth()->user()->id)}}">
+        <a href="mypages/{{$mypage->id}}/edit">
             <button type='button' class='btn btn-primary'>ユーザー編集</button>
        </a></div> 
 
+       @if(count($posts) > 0)
+                    @foreach($posts as $post)
+                    <div class="row">
+               
+                        <div class="col-lg-12">
+                            <!-- Blog post-->
+                          
+                            <div class="card mb-4">
+                          
+                                <a href="#!"><img class="card-img-top" src="{{ asset($post->image_path) }}" alt="..." /></a>
+                                <div class="card-body">
+                                <h2 class="card-title h4">{{$post->title}}</h2>
+                                    <div class="small text-muted">{{($post->created_at)->format('Y/m/d')}}</div>
+                                   
+                                    <p class="card-text">{{$post->feelings}}</p>
+                                    @foreach($post->tags as $tag)
+                                  <a href=""> #{{ $tag->tag_name }}</a>
+                                     @endforeach
+                                     @endforeach
+                                     @endif
+       
 </div>
 
 

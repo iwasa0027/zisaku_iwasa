@@ -14,10 +14,14 @@
 
     <div class="form-group">
     <input id="image_path" type="file" name="image_path" value="{{$post->image_path}}">
-    <button type="submit">
-       アップロード
-    </button>
+   
     </div>
+
+    <div class="form-group">
+   <label for="exampleFormControlInput1">タグ</label>
+   <input type="text" name="tags" value="{{old('tags')}}">
+ </div>
+
 
     <div class="form-group">
     <label for="exampleFormControlTextarea1">本文</label>

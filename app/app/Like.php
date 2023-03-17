@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
 
 class Like extends Model
 {
@@ -12,6 +13,6 @@ class Like extends Model
     }
     public function posts()
     {   //postsテーブルとのリレーションを定義するreviewメソッド
-        return $this->belongsTo('App\posts');
+        return $this->belongsTo('App\Post');
     }
 }

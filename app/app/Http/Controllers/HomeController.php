@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Post;
+
 class HomeController extends Controller
 {
     /**
@@ -21,10 +23,13 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
         $post =Auth::User()->posts()->get();
-        return view('home')->with(['posts' => $post]);
+        $sort=$request->sort;
+        $products=Post::orderBy('created_at', 'desc')->paginate(4);
+
+        return view('home',['posts' => $post, 'sort'=>$sort,'posts'=>$products]);
     }
     
 }
