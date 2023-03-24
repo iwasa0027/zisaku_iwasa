@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Post;
 use App\Article;
 use App\Tag;
+use App\Like;
 use Illuminate\Http\Request;
+use App\Http\Requests\CreateData;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -21,9 +23,11 @@ class PostController extends Controller
     public function index(Request $request)
     {
       
-        $posts = Post::paginate(20);
+        $sort=$request->sort;
+        $posts = Post::orderBy('created_at', 'desc')->paginate(2);
+        $tags=Tag::get();
         $keyword = $request->input('keyword');
-
+       
         $query = Post::query();
 
 
@@ -41,14 +45,26 @@ class PostController extends Controller
 
             // 単語をループで回し、ユーザーネームと部分一致するものがあれば、$queryとして保持される
             foreach($wordArraySearched as $value) {
-                $query->where('title', 'like', '%'.$value.'%')->orWhere('feelings', 'like', '%'.$value.'%');
+                $query->where('title', 'like', '%'.$value.'%')
+                ->orWhere('feelings', 'like', '%'.$value.'%')
+
+                ->orWhereHas('tags', function ($query) use ($keyword){
+                    $query->where('tag_name', 'like', '%' .$keyword. '%');
+                });
             }
-            $posts = $query->paginate(20);
+            $posts = $query->paginate(2);
         }
+
+
+      
             return view('posts.list')
             ->with([
                 'posts' => $posts,
                 'keyword' => $keyword,
+                'tags'=>$tags,
+                'sort'=>$sort,
+               
+                
             ]);
 
 
@@ -83,7 +99,7 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Createdata $request)
     {
         $post = new Post;
 
@@ -150,6 +166,9 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+
+
+        
           return view('posts.edit')->with('post', $post);
     }
 
@@ -160,10 +179,10 @@ class PostController extends Controller
      * @param  \App\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(CreateData $request, Post $post)
     {
               // preg_match_allを使用して#タグのついた文字列を取得している
-        preg_match_all('/#([a-zA-z0-9０-９ぁ-んァ-ヶ亜-熙]+)/u', $request->tags, $match);
+        preg_match_all('/#([a-zA-z0-9０-９ぁ-んァ-ヶ一-龠]+)/u',$request->tags, $match);
 
         $before = [];
         foreach($post->tags as $tag){
@@ -180,7 +199,7 @@ class PostController extends Controller
          foreach($after as $tag) {
              array_push($tags_id, $tag->id);
          }
-         $post->tags()->sync($tags_id); //ここが重要です。
+   
       
 
   // ディレクトリ名
@@ -199,6 +218,7 @@ class PostController extends Controller
         //$article->image_path = $request->image_path;
         $post->feelings = $request->feelings;
         $post->save();
+        $post->tags()->sync($tags_id); //ここが重要です。
       
         return redirect("/posts/{$post->id}");
     }
@@ -213,5 +233,25 @@ class PostController extends Controller
     {
         $post->delete();
         return redirect('/home');
+    }
+  
+
+    public function bookmark_articles(Request $request){
+
+        // $posts = Auth::user()->likes()->orderBy('created_at', 'desc')->paginate(4);
+        $post= Like::join('posts','likes.post_id','posts.id')->where('likes.user_id',Auth::id())->get();
+        //dd($post);
+      
+        
+
+        return view('posts.good',['posts' => $post]);
+    }
+
+    
+    public function postedits(Request $request, Post $post){
+
+             
+        
+        return view('posts.post_edits',['posts' => $post]);
     }
 }

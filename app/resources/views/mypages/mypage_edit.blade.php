@@ -6,10 +6,28 @@
 
 
 <div>
+@if($errors->any())
+<div class='alert alert-danger'>
+ <ul>
+  @foreach($errors->all() as $message)
+  <li>{{$message}}</li>
+  @endforeach
+ </ul>
+
+</div>
+@endif
+
+<div class="container small" >
+
+               
+                 
+<div class="card mb-4">
+
 <form action="{{ route('mypages.update', $auth->id)}}" method="POST" enctype="multipart/form-data">
 
     @csrf
     <input type="hidden" name="_method" value="PUT">
+    <input type="hidden" name="password" value="{{$mypage->password}}">
 
 
     <div class="form-group">
@@ -38,12 +56,9 @@
     </div>
     <input type="submit" class="btn btn-primary" value="更新"/>
   </form>
-  <form action="/mypages/{{$mypage->id}}" method="POST">
-    @method('DELETE')
-    @csrf
-    <input type="submit" class="btn btn-danger mt-3" value="削除"/>
-  </form>
- 
+</div>
+</div>
+  
 
 </div>  
 

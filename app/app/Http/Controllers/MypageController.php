@@ -6,6 +6,7 @@ use App\Mypage;
 use App\User;
 use App\Post;
 use Illuminate\Http\Request;
+use App\Http\Requests\MypageData;
 
 
 use Illuminate\Support\Facades\Auth;
@@ -17,12 +18,14 @@ class MypageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $post=Post::where('user_id',Auth::id())->get();//自分のみのを持ってくる
-        $mypage =Auth::user();
        
-        return view("mypages.mypage",['mypage' => $mypage,'posts'=>$post ]);
+        $mypage =Auth::user();
+
+        $sort=$request->sort;
+        $posts=Post::where('user_id',Auth::id())->orderBy('created_at', 'desc')->paginate(2);
+        return view("mypages.mypage",['mypage' => $mypage,'sort'=>$sort,'posts'=>$posts ]);
 
     }
 
@@ -60,7 +63,10 @@ class MypageController extends Controller
      */
     public function show(User $mypage)
     {
-        //return view('mypages.edit')->with('mypage', $mypage);
+        $post=Post::where('user_id',Auth::id())->get();//自分のみのを持ってくる
+
+        
+        return view('mypages.mypage_show',['mypage' => $mypage,'posts'=>$post]);
     }
 
     /**
@@ -83,7 +89,7 @@ class MypageController extends Controller
      * @param  \App\Mypage  $mypage
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $mypage)
+    public function update(MypageData $request, User $mypage)
     {
 
 // 対象レコード取得
