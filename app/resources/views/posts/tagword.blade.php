@@ -4,11 +4,11 @@
 
 @section('content')
 
-<form method="POST" action="{{route('posts.store')}}" >
 
 
 
-<h3 class="fw-bolder mb-1"> {{ $keyword }}の検索結果</h3>
+
+<h3 class="fw-bolder mb-1">#{{ $tagword }}</h3>
         <!-- Page content-->
         <div class="container">
             <div class="row">
@@ -72,7 +72,9 @@
                  
                     <!-- Pagination-->                         
                   
+            
                     {{ $posts->appends(request()->query())->links() }}
+                   
                     <div class="text-center my-5">
                     <a href="{{ route('home')}}">
             <button type='button' class='btn btn-primary'>ホームに戻る</button></a>

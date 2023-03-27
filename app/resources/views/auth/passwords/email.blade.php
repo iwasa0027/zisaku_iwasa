@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('パスワード再設定') }}</div>
+                <div class="p-3 mb-2 bg-success text-white">{{ __('パスワード再設定') }} <img src="{{ asset('image/pcsp019.png')}}" width="10%"></div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -34,7 +34,7 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    {{ __('Send Password Reset Link') }}
+                                    {{ __('送信する') }}
                                 </button>
                             </div>
                         </div>

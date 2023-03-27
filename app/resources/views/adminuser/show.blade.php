@@ -3,8 +3,8 @@
 
 @section('title', 'ユーザー情報')
 @section('content')
-
-
+@can('admin_only')
+<h2>ユーザー詳細</h2>
 
 <div class="profile_box">
     <div class="box-title">マイページ</div>
@@ -14,7 +14,7 @@
         <div class="profile_name"><span>{{$users->name}}</span></div><br>
     </div>
         <div class="profile_name"><span>プロフィール</span></div><br>
-        <div class="profile_name"><span>{{$users->profile}}</span></div><br>
+        <div class="profile_name"><span>{!!nl2br(e($users->profile))!!}</span></div><br>
         <!-- <p class="profile_center" name="profile" placeholder="感想やご意見" cols="50" rows="20" /></p> -->
 
 
@@ -30,7 +30,7 @@
         </header>
 
 
-        <div class="container">
+       <div class="container">
             <div class="row">
                 <!-- Blog entries-->
                 <div class="col-lg-8">
@@ -46,17 +46,20 @@
                           
                             <div class="card mb-4">
                             <!-- Post::where('user_id',Auth::id()) -->
-                            
-                                <a href="#!"><img class="card-img-top" src="{{ asset($post->image_path) }}" alt="..." /></a>
+                         
+                               <img class="card-img-top" src="{{ asset($post->image_path) }}" alt="..." />
                                 <div class="card-body">
                                 <h1 class="card-title h3">{{$post->title}}</h1>
-                                    <div class="small text-muted">{{($post->created_at)->format('Y/m/d')}}</div>
-                                   
+                                    <div class="small text-muted">投稿日：{{($post->created_at)->format('Y/m/d')}}
+                                    <div class="small text-muted">編集日：{{($post['updated_at'])->format('Y/m/d')}}　
+
+                              
+                                   </div>
                                     @foreach($post->tags as $tag)
                                   <a href="#!"> #{{ $tag->tag_name }}</a>
                                      @endforeach
 
-                                     <p class="card-text">{{$post->feelings}}</p>
+                                     <p class="card-text">{{Str::limit($post->feelings, 20, '…' )}}</p>
                                 
                                     <br><a class="btn btn-primary" href="{{route('adminpost.show',['adminpost'=>$post->id])}}"> 記事を読む →</a>
                                     
@@ -67,13 +70,20 @@
                     </div>
                    @endforeach
                    @endif       
-
-
-</div>
+                 
+                    <!-- Pagination-->                         
+                  
+                    {{$posts->links()}}
+                </div>
             </div>
         </div>
-
+        <div class="text-center my-5">
+            <a href="{{ route('adminuser.index')}}">
+            <button type='button' class='btn btn-primary'>ホームに戻る</button></a>
                   
+</div>
+
+
 <style>
     .col-lg-8{
    
@@ -123,4 +133,12 @@ margin: 0;
 
 
 </style>
+
+@else
+            <div class="text-center my-5">
+    <p>ご不便をおかけして申し訳ございません。</p>
+    <p class="lead">
+    <a class="btn btn-primary" href="/" role="button">トップページへ戻る</a>
+    </p>
+@endcan
 @endsection 

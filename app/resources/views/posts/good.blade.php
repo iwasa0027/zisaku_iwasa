@@ -1,12 +1,16 @@
 @extends('layouts.app')
 @section('content')
 
+
+<h3 class="fw-bolder mb-1">いいね一覧</h3>
+
+
  
 
 <div class="container">
             <div class="row">
                 <!-- Blog entries-->
-                <div class="col-lg-8">
+                <div class="col-lg-12">
                     
                     <!-- Nested row for non-featured blog posts-->
 
@@ -29,7 +33,7 @@
                                    
                              
 
-                                     <p class="card-text">{{$post['feelings']}}</p>
+                                     <p class="card-text">{{Str::limit($post->feelings, 30, '…' )}}</p>
                                 
                                     <br><a class="btn btn-primary" href="{{route('posts.show',$post->id)}}"> 記事を読む →</a>
                                     
@@ -37,12 +41,12 @@
                                      <!-- //いいねを付ける記述を修正しています -->
                                      @if (!$post['isLikedBy(Auth::user())'])
                                      <span class="likes">
-                                            <i class=" fa-regular fa-star like-toggle" data-post-id="{{ $post->id }}"></i>
+                                            <i class=" fa-solid fa-star like-toggle icon" data-post-id="{{ $post->id }}"></i>
                                         <span class="like-counter">{{$post['likes_count']}}</span>
                                         </span><!-- /.likes -->
                                     @else
                                         <span class="likes">
-                                            <i class="fa-solid fa-star heart like-toggle  icon" data-post-id="{{ $post->id }}"></i>
+                                            <i class="fa-solid fa-star heart like-toggle  " data-post-id="{{ $post->id }}"></i>
                                         <span class="like-counter">{{$post['likes_count']}}</span>
                                         </span><!-- /.likes -->
                                     @endif
@@ -61,12 +65,15 @@
                    @endif       
                  
                     <!-- Pagination-->                         
-                  
-                    
+                    {{ $posts->links() }}
+                    <div class="text-center my-5">
+                    <a href="{{ route('mypages.index')}}">
+            <button type='button' class='btn btn-primary'>マイページに戻る</button></a>
+                    </div>
                 </div>
             </div>
         </div>
-</div>
+
 
 <style>
 

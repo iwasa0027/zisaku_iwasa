@@ -2,7 +2,7 @@
 
 @section('content')
 
-
+@can('admin_only')
 <h2>ユーザー情報</h2>
 
 
@@ -19,14 +19,14 @@
                         <th>名前</th>
                         <th>E-Mail</th>
                         <th>投稿数</th>
-                        <th>ユーザー詳細</th>
+                 
                     </tr>
                 </thead>
                 
                 <tbody>
                     <tr v-for="user in users">
                         <td v-text="user.id">{{$user->id}}</td>
-                        <td v-text="user.name">{{$user->name}}</td>
+                        <td v-text="user.name">{{Str::limit($user->name, 6, '…' )}}</td>
                         <td v-text="user.email">{{$user->email}}</td>
                         <td v-text="user.posts">{{$user->posts_count}}</td>
     
@@ -42,12 +42,25 @@
                 </tbody>
             </table>
             @endforeach
-            
+        
             @endif
 
+   
+
+            <div class="text-center my-5">
+            <a href="{{ route('adminuser.index')}}">
+            <button type='button' class='btn btn-primary'>ホームに戻る</button></a>
 
 
+            @else
+            <div class="text-center my-5">
+    <p>ご不便をおかけして申し訳ございません。</p>
+    <p class="lead">
+    <a class="btn btn-primary" href="/" role="button">トップページへ戻る</a>
+    </p>
 
+
+            @endcan
             
 
             @endsection

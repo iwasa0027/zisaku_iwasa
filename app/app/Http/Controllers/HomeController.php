@@ -33,7 +33,7 @@ class HomeController extends Controller
 
         $post =Auth::User()->posts()->get();
         $sort=$request->sort;
-        $products=Post::orderBy('created_at', 'desc')->paginate(4);
+        $products=Post::orderBy('created_at', 'desc')->paginate(10);
        
         return view('home',['posts' => $post, 'sort'=>$sort,'products'=>$products]);
     }

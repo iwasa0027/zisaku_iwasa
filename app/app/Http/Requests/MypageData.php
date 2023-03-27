@@ -24,7 +24,7 @@ class MypageData extends FormRequest
     public function rules()
     {
         return [
-            'image'=>'image|mimes:jpeg,png,jpg,gif',
+            'image'=>'required|image|mimes:jpeg,png,jpg,gif',
             'profile'=>'max:300',
             'name'=>'required|max:50',
              'email'=>'required|email|max:100',

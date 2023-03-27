@@ -23,16 +23,16 @@ use App\Http\Controllers\AdminpostController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 
 Auth::routes();
 
 Route::group(['middleware'=>'auth','can:users',],function(){
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('home');
 
 //Route::get('/', [PasswordController::class, 'emailFormResetPassword'])->name('form');
 // メール送信処理
@@ -48,7 +48,8 @@ Route::post('/like', 'LikeController@like');
 
 Route::get('/bookmarks', [PostController::class, 'bookmark_articles'])->name('bookmarks');
 
-Route::get('/postedits', [PostController::class, 'postedits'])->name('postedits');
+
+Route::get('/tagword', [PostController::class, 'tagwords'])->name('tagword');
 });
 
  Route::group(['middleware' => 'auth', 'can:admin_only'], function () {

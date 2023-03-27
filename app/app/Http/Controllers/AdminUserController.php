@@ -20,11 +20,11 @@ class AdminUserController extends Controller
 
         $users = new User;
 
-        $per_page = 2; // １ページごとの表示件数
+        $per_page = 10; // １ページごとの表示件数
         $users = \App\User::paginate($per_page);
 
-        $users = User::withCount('posts')->get();
-        //dd($users);
+        $users = User::withCount('posts')->paginate($per_page);
+   
        
         return view('adminuser.index')->with('users', $users);
     }
@@ -70,9 +70,13 @@ class AdminUserController extends Controller
       
 
         $user= User::find($id);
+
+        $per_page = 5; // １ページごとの表示件数
+    
+
        
         //$posts=Post::where( optional($user->post)->user_id())->get();
-        $posts=Post::where('user_id',$id)->get();
+        $posts=Post::where('user_id',$id)->orderBy('created_at', 'desc')->paginate($per_page);
       
         //$posts=Post::where( optional($user->user)->id())->where('user_id',Auth::id())->get();
        
@@ -118,14 +122,16 @@ class AdminUserController extends Controller
     public function user_index_crud(Request $request)
     {
      
-    
-        $keyword = $request->input('keyword');
-       
-        $query = User::query();
+        $users = new User;
+
+        $per_page = 2; // １ページごとの表示件数
+        $users = \App\User::paginate($per_page);
 
         $users = User::withCount('posts')->get();
 
-
+        $keyword = $request->input('keyword');
+       
+        $query = User::query();
 
         if($keyword) {
             // $query->where('title', 'LIKE', "%{$keyword}%")
@@ -140,13 +146,14 @@ class AdminUserController extends Controller
 
             // 単語をループで回し、ユーザーネームと部分一致するものがあれば、$queryとして保持される
             foreach($wordArraySearched as $value) {
-                $query->where('name', 'like', '%'.$value.'%');
-
+                $query->where('name', 'like', '%'.$value.'%')
+                ->orWhere('email', 'like', '%'.$value.'%');
             }
-            $users = $query->paginate(2);
+            $users = $query->orderBy('created_at', 'asc')->withCount('posts')->paginate(10);
+         
         }
 
-
+       
       
 
         

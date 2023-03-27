@@ -24,7 +24,7 @@ class MypageController extends Controller
         $mypage =Auth::user();
 
         $sort=$request->sort;
-        $posts=Post::where('user_id',Auth::id())->orderBy('created_at', 'desc')->paginate(2);
+        $posts=Post::where('user_id',Auth::id())->orderBy('created_at', 'desc')->paginate(5);
         return view("mypages.mypage",['mypage' => $mypage,'sort'=>$sort,'posts'=>$posts ]);
 
     }
@@ -61,9 +61,12 @@ class MypageController extends Controller
      * @param  \App\Mypage  $mypage
      * @return \Illuminate\Http\Response
      */
-    public function show(User $mypage)
+    public function show(Request $request, User $mypage)
     {
-        $post=Post::where('user_id',Auth::id())->get();//自分のみのを持ってくる
+        
+        $sort=$request->sort;
+     
+        $post=Post::where('user_id',$mypage->id)->orderBy('created_at', 'desc')->paginate(5);;//自分のみのを持ってくる
 
         
         return view('mypages.mypage_show',['mypage' => $mypage,'posts'=>$post]);
@@ -140,8 +143,7 @@ class MypageController extends Controller
     public function destroy(User $mypage)
     {
         
-            $mypage->delete();
-            return redirect('/login');
+      //
         
     }
 }

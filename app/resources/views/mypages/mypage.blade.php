@@ -17,15 +17,13 @@
 
         <div class="profile_name"><span>{{$mypage->name}}</span></div><br>
     </div>
-        <div class="profile_name"><span><プロフィール></span></div><br>
-        <div class="profile_name"><span>{{$mypage->profile}}</span></div><br>
+        <div class="profile_name"><span><プロフィール></span></div>
+        <div class="profile_name"><span>{!!nl2br(e($mypage->profile))!!}</span></div><br>
 
 
 
-      
-        <a href="{{route('posts.create')}}" class="mypage1">
-            <button type='button' class='btn btn-primary'>新規投稿ページ</button>
-       </a>
+    
+        <div class="profile_center">
 
        <a href="mypages/{{$mypage->id}}/edit" class="mypage1">
             <button type='button' class='btn btn-primary'>ユーザー編集</button>
@@ -34,7 +32,7 @@
        <a href="{{ route('bookmarks') }}" class="mypage1">
             <button type='button' class='btn btn-primary'>いいね一覧</button>
        </a>
-
+        </div>
        <header class="p-3 mb-2 bg-secondary border-bottom mb-4" >
             <div class="container">
                 <div class="text-center my-5">
@@ -63,10 +61,8 @@
                           
                             <div class="card mb-4">
                             <!-- Post::where('user_id',Auth::id()) -->
-                            <a  href="{{route('mypages.show',$post->user->id)}}">
-                                {{$post->user->name}}
-                            </a>
-                                <a href="#!"><img class="card-img-top" src="{{ asset($post->image_path) }}" alt="..." /></a>
+                         
+                               <img class="card-img-top" src="{{ asset($post->image_path) }}" alt="..." />
                                 <div class="card-body">
                                 <h1 class="card-title h3">{{$post->title}}</h1>
                                     <div class="small text-muted">{{($post->created_at)->format('Y/m/d')}}
@@ -79,7 +75,7 @@
                                   <a href="#!"> #{{ $tag->tag_name }}</a>
                                      @endforeach
 
-                                     <p class="card-text">{{$post->feelings}}</p>
+                                     <p class="card-text">{{Str::limit($post->feelings, 20, '…' )}}</p>
                                 
                                     <br><a class="btn btn-primary" href="{{route('posts.show',$post->id)}}"> 記事を読む →</a>
                                     
@@ -87,7 +83,7 @@
                                      <!-- //いいねを付ける記述を修正しています -->
                                      @if (!$post->isLikedBy(Auth::user()))
                                      <span class="likes">
-                                            <i class=" fa-regular fa-star like-toggle" data-post-id="{{ $post->id }}"></i>
+                                            <i class=" fa-solid fa-star like-toggle" data-post-id="{{ $post->id }}"></i>
                                         <span class="like-counter">{{$post->likes_count}}</span>
                                         </span><!-- /.likes -->
                                     @else
@@ -123,9 +119,7 @@
     margin-top: 50px;
 }
 
-.mypage1{
-    margin-left: 230px;
-}
+
 
 
 .col-lg-8{

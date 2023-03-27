@@ -19,7 +19,7 @@ class AdminPostController extends Controller
 
       
 
-        $per_page = 6; // １ページごとの表示件数
+        $per_page = 10; // １ページごとの表示件数
         $posts = \App\Post::paginate($per_page);
 
       
@@ -98,8 +98,8 @@ class AdminPostController extends Controller
 
     public function index_crud(Request $request)
     {
-     
-    
+        $sort=$request->sort;
+        $posts = Post::orderBy('created_at', 'asc')->paginate(5);
         $keyword = $request->input('keyword');
        
         $query = Post::query();
@@ -119,20 +119,23 @@ class AdminPostController extends Controller
 
             // 単語をループで回し、ユーザーネームと部分一致するものがあれば、$queryとして保持される
             foreach($wordArraySearched as $value) {
-                $query->where('title', 'like', '%'.$value.'%')
+                $query->where('created_at', 'like', '%'.$value.'%')
+                 ->orWhere('updated_at', 'like', '%'.$value.'%')
 
+                
                 ->orWhereHas('user', function ($query) use ($keyword){
                     $query->where('name', 'like', '%' .$keyword. '%');
                 });
 
             }
-            $posts = $query->paginate(2);
+            $posts = $query->orderBy('created_at', 'asc')->paginate(10);
         }
 
 
       
             return view('adminpost.crud_index')
             ->with([
+                'sort'=>$sort,
                 'posts' => $posts,
                 'keyword' => $keyword,
               

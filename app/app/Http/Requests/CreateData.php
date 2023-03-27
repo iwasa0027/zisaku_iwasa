@@ -26,11 +26,11 @@ class CreateData extends FormRequest
         return [
             'title'=>'required',
             'image_path'=>'required|image|mimes:jpeg,png,jpg,gif',
-            'feelings'=>'required|max:1000',
+            'feelings'=>'required|max:500',
             
             'tag_name'=>'max:100',
 
-            'image'=>'image|mimes:jpeg,png,jpg,gif',
+          
            
         ];
     }

@@ -35,7 +35,7 @@
        
         <div class="text-center my-5">
                    
-                   <img src="{{ asset('image/sample.png')}}" id="slide_img" class="slider" />
+                   <img src="{{ asset('image/bbbbbb.jpg')}}" id="slide_img" class="slider" />
                  
                       
                       
@@ -47,11 +47,11 @@
     }
 </style>
 <script>
- const img_src = ["{{ asset('image/thumbnail_image004.jpg')}}","{{ asset('image/thumbnail_image005.jpg')}}","{{ asset('image/thumbnail_image006.jpg')}}" ];
+ const img_src = ["{{ asset('image/aaaaa.jpg')}}","{{ asset('image/thumbnail_image005.jpg')}}","{{ asset('image/ccccc.jpg')}}","{{ asset('image/thumbnail_image012.jpg')}}","{{ asset('image/bbbbbb.jpg')}}" ];
       let num = -1;
 
       function slide_time() {
-        if (num === 2) {
+        if (num === 4) {
           num = 0;
         } else {
           num++;
@@ -60,7 +60,7 @@
       
       }
 
-      setInterval(slide_time, 1300);
+      setInterval(slide_time, 1500);
 
       
 
@@ -96,10 +96,10 @@
                                     <div class="small text-muted">{{($product->created_at)->format('Y/m/d')}}</div>
                                    
                                     @foreach($product->tags as $tag)
-                                  <a href="#!"> #{{ $tag->tag_name }}</a>
+                                  <a href="{{ route('tagword',['tagword'=>$tag->tag_name])}}"> #{{ $tag->tag_name }}</a>
                                      @endforeach
-
-                                     <p class="card-text">{{Str::limit($product->feelings, 40, '…' )}}</p>
+                                     
+                                     <p class="card-text">{{Str::limit($product->feelings, 20, '…' )}}</p>
                                 
                                     <br><a class="btn btn-primary" href="{{route('posts.show',$product->id)}}"> 記事を読む →</a>
                                     
@@ -107,7 +107,7 @@
                                      <!-- //いいねを付ける記述を修正しています -->
                                      @if (!$product->isLikedBy(Auth::user()))
                                      <span class="likes">
-                                            <i class=" fa-regular fa-star like-toggle" data-post-id="{{ $product->id }}"></i>
+                                            <i class=" fa-solid fa-star like-toggle" data-post-id="{{ $product->id }}"></i>
                                         <span class="like-counter">{{$product->likes_count}}</span>
                                         </span><!-- /.likes -->
                                     @else
@@ -161,7 +161,7 @@
                 <div class="col-lg-4">
                     <!-- Search widget-->
                     <div class="card mb-4">
-                        <div class="card-header">検索</div>
+                        <div class="card-header">フリーワード検索</div>
                         <div class="card-body">
                             <div class="input-group">
                          <div>
@@ -171,30 +171,62 @@
                             </form>
                             
                         </div>
+
+                     
                              
                             </div>
                         </div>
                     </div>
                     <!-- Categories widget-->
                     <div class="card mb-4">
-                        <div class="card-header">おすすめ検索</div>
+                        <div class="card-header">人気ワード検索</div>
                         <div class="card-body">
                             <div class="row">
 
                                 <div class="col-sm-6">
                                     
                                     <ul class="list-unstyled mb-0">
-                                       <li> <a href="/posts?keyword=宮城">・宮城</a></li>                                  
-                                        <li><a href="/posts?keyword=桜">・桜</a></li>
-                                        <li><a href="/posts?keyword=夜景">・夜景</a></li>
+                                       <li> <a href="{{ route('posts.index',['keyword'=>'宮城'])}}">・宮城</a></li>                                  
+                                        <li><a href="{{ route('posts.index',['keyword'=>'桜'])}}">・桜</a></li>
+                                        <li><a href="{{ route('posts.index',['keyword'=>'夜景'])}}">・夜景</a></li>
                                     </ul>
                                 </div>
                                 <div class="col-sm-6">
                                     <ul class="list-unstyled mb-0">
-                                        <li><a href="/posts?keyword=香川">・香川</a></li>
+                                        <li><a href="{{ route('posts.index',['keyword'=>'香川'])}}">・香川</a></li>
                                         
-                                        <li><a href="/posts?keyword=一人旅">・一人旅</a></li>
-                                        <li><a href="/posts?keyword=花">・花</a></li>
+                                        <li><a href="{{ route('posts.index',['keyword'=>'一人旅'])}}">・一人旅</a></li>
+                                        <li><a href="{{ route('posts.index',['keyword'=>'花'])}}">・花</a></li>
+                                    </ul>
+                                </div>
+                               
+                            </div>
+                            
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="card mb-4">
+                        <div class="card-header">おすすめハッシュタグ</div>
+                        <div class="card-body">
+                            <div class="row">
+
+                                <div class="col-sm-6">
+                                    
+                                    <ul class="list-unstyled mb-0">
+                                       <li> <a href="{{ route('tagword',['tagword'=>'宮城'])}}">#宮城</a></li>                                  
+                                        <li><a href="{{ route('tagword',['tagword'=>'桜'])}}">#桜</a></li>
+                                        <li><a href="{{ route('tagword',['tagword'=>'夜景'])}}">#夜景</a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-sm-6">
+                                    <ul class="list-unstyled mb-0">
+                                        <li><a href="{{ route('tagword',['tagword'=>'香川'])}}">#香川</a></li>
+                                        
+                                        <li><a href="{{ route('tagword',['tagword'=>'一人旅'])}}">#一人旅</a></li>
+                                        <li><a href="{{ route('tagword',['tagword'=>'花'])}}">#花</a></li>
                                     </ul>
                                 </div>
                                
@@ -209,22 +241,6 @@
 
 
 
-                    <div class='row justify-content-around mt-3'>
-        <a href="{{route('posts.create')}}">
-            <button type='button' class='btn btn-primary'>新規投稿ページ</button>
-       </a></div> 
-
-       <div class='row justify-content-around mt-3'>
-       <a href="{{route('posts.store')}}">
-            <button type='button' class='btn btn-primary'>リスト確認</button>
-       </a></div> 
-
-       <div class='row justify-content-around mt-3'>
-       <a href="{{ route('mypages.index')}}">
-            <button type='button' class='btn btn-primary'>マイページ</button>
-       </a></div> 
-      
-
 
 
        
@@ -236,7 +252,7 @@
         </div>
         <!-- Footer-->
         <footer class="py-5 bg-dark">
-            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2022</p></div>
+            <div class="container"><p class="m-0 text-center text-white"> Your Website 2022</p></div>
         </footer>
     
 
@@ -246,18 +262,29 @@
  
 @elsecan('admin_only')
 
-<p>管理者専用ページ</p>
-<p>ユーザー情報</p>
-<div class='row justify-content-around mt-3'>
+
+<header class="p-3 mb-4 border-bottom mb-4">
+<div class="container">
+                <div class="text-center my-5">
+<h3>管理者専用ページ</h3>
+                </div>
+</div>
+</header>
+
+
+<div class="text-center my-5">
+
        <a href="{{route('adminuser.index')}}">
             <button type='button' class='btn btn-primary'>ユーザー情報</button>
-       </a></div> 
-<p>投稿情報</p>
-<div class='row justify-content-around mt-3'>
+       </a>
+</div>
+
+<div class="text-center my-5">
+
        <a href="{{route('adminpost.index')}}">
             <button type='button' class='btn btn-primary'>投稿情報</button>
-       </a></div> 
-
+       </a>
+</div>
 
 @endcan
 @endsection

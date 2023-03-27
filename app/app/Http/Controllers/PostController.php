@@ -22,16 +22,15 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-      
+        
+  
+
         $sort=$request->sort;
-        $posts = Post::orderBy('created_at', 'desc')->paginate(2);
+        $posts = Post::orderBy('created_at', 'desc')->paginate(5);
         $tags=Tag::get();
         $keyword = $request->input('keyword');
        
         $query = Post::query();
-
-
-
         if($keyword) {
             // $query->where('title', 'LIKE', "%{$keyword}%")
             //     ->orWhere('feelings', 'LIKE', "%{$keyword}%");
@@ -52,19 +51,20 @@ class PostController extends Controller
                     $query->where('tag_name', 'like', '%' .$keyword. '%');
                 });
             }
-            $posts = $query->paginate(2);
+            $posts = $query->orderBy('created_at', 'desc')->paginate(5);
         }
 
+    
+        
 
-      
+
+
             return view('posts.list')
             ->with([
                 'posts' => $posts,
                 'keyword' => $keyword,
                 'tags'=>$tags,
                 'sort'=>$sort,
-               
-                
             ]);
 
 
@@ -142,7 +142,7 @@ class PostController extends Controller
 
         $post->tags()->attach($tags_id);
 
-        return redirect("/home");
+        return redirect("/");
 
      
     }
@@ -182,7 +182,7 @@ class PostController extends Controller
     public function update(CreateData $request, Post $post)
     {
               // preg_match_allを使用して#タグのついた文字列を取得している
-        preg_match_all('/#([a-zA-z0-9０-９ぁ-んァ-ヶ一-龠]+)/u',$request->tags, $match);
+        preg_match_all('/#([a-zA-Z0-9０-９ぁ-んァ-ヶー一-龠]+)/u',$request->tags, $match);
 
         $before = [];
         foreach($post->tags as $tag){
@@ -220,7 +220,7 @@ class PostController extends Controller
         $post->save();
         $post->tags()->sync($tags_id); //ここが重要です。
       
-        return redirect("/posts/{$post->id}");
+        return redirect("/mypages");
     }
 
     /**
@@ -232,14 +232,17 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $post->delete();
-        return redirect('/home');
+        return redirect('/mypages');
     }
   
 
     public function bookmark_articles(Request $request){
 
+        $sort=$request->sort;
+        $post = Post::orderBy('created_at', 'desc')->paginate(5);
+
         // $posts = Auth::user()->likes()->orderBy('created_at', 'desc')->paginate(4);
-        $post= Like::join('posts','likes.post_id','posts.id')->where('likes.user_id',Auth::id())->get();
+        $post= Like::join('posts','likes.post_id','posts.id')->where('likes.user_id',Auth::id())->orderBy('likes.created_at', 'desc')->paginate(5);
         //dd($post);
       
         
@@ -247,11 +250,44 @@ class PostController extends Controller
         return view('posts.good',['posts' => $post]);
     }
 
-    
-    public function postedits(Request $request, Post $post){
 
-             
-        
-        return view('posts.post_edits',['posts' => $post]);
+
+    
+    public function tagwords(Request $request){
+
+      
+        $sort=$request->sort;
+        $posts = Post::orderBy('created_at', 'desc')->paginate(5);
+        $tags=Tag::get();
+        $tagword = $request->input('tagword');
+        $query2 = Post::query();
+        if($tagword) {
+            // $query->where('title', 'LIKE', "%{$keyword}%")
+            //     ->orWhere('feelings', 'LIKE', "%{$keyword}%");
+
+             // 全角スペースを半角に変換
+            $spaceConversion = mb_convert_kana($tagword, 's');
+
+            // 単語を半角スペースで区切り、配列にする（例："山田 翔" → ["山田", "翔"]）
+            $wordArraySearched = preg_split('/[\s,]+/', $spaceConversion, -1, PREG_SPLIT_NO_EMPTY);
+
+
+            // 単語をループで回し、ユーザーネームと部分一致するものがあれば、$queryとして保持される
+            foreach($wordArraySearched as $value) {
+                $query2->whereHas('tags', function($query2) use ($value){
+                    $query2->where('tag_name', 'like', '%' .$value. '%');
+                });
+
+            }
+            $posts = $query2->orderBy('created_at', 'desc')->paginate(5);
+        }
+    
+        return view('posts.tagword') ->with([
+            'posts' => $posts,
+            'tagword' => $tagword,
+            'tags'=>$tags,
+            'sort'=>$sort,
+        ]);
     }
+
 }
