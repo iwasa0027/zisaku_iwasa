@@ -21,8 +21,9 @@
                                 <a href="#!"><img class="card-img-top" src="{{ asset($post->image_path) }}" alt="..." /></a>
                                 <div class="card-body">
                                 <h1 class="card-title h3">{{$post['title']}}</h1>
-                                    <div class="small text-muted">投稿日：{{($post['created_at'])->format('Y/m/d')}}　
-                                    <div class="small text-muted">編集日：{{($post['updated_at'])->format('Y/m/d')}}　
+                                    <div class="small text-muted">投稿日：{{($post['created_at'])->format('Y/m/d')}}　</div>
+                                    <div class="small text-muted">編集日：{{($post['updated_at'])->format('Y/m/d')}}　   </div>
+                                    <p class="card-text">場所：{{$post->pref}}</p>
                                    
                              
 
@@ -30,7 +31,7 @@
                                 
                                     
                                    
-                                    </div>
+                                 
                                     @foreach($post->tags as $tag)
                                   <a href="#!"> #{{ $tag->tag_name }}</a>
                                      @endforeach
@@ -38,12 +39,19 @@
                                     <p class="card-text">{!!nl2br(e($post['feelings']))!!}</p>
                                     
                                 </div>            
-                           
+                                <button class="rounded-md bg-primary   px-4 py-2" onClick="history.back();">戻る</button> 
                             </div>
-                            <button class="rounded-md bg-primary   px-4 py-2" onClick="history.back();">戻る</button> 
+                         
                         </div>
                     </div>
             
+                    <style>
+  body{
+        background: #DFEFF2;
+    }
+
+                    </style>
+
                     <!-- Pagination-->                         
                   
                     

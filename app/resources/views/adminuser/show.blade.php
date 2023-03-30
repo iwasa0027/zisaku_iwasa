@@ -50,11 +50,13 @@
                                <img class="card-img-top" src="{{ asset($post->image_path) }}" alt="..." />
                                 <div class="card-body">
                                 <h1 class="card-title h3">{{$post->title}}</h1>
-                                    <div class="small text-muted">投稿日：{{($post->created_at)->format('Y/m/d')}}
+                                    <div class="small text-muted">投稿日：{{($post->created_at)->format('Y/m/d')}}</div>
                                     <div class="small text-muted">編集日：{{($post['updated_at'])->format('Y/m/d')}}　
+                                  
 
                               
                                    </div>
+                                     <p class="card-text">場所：{{$post->pref}}</p>
                                     @foreach($post->tags as $tag)
                                   <a href="#!"> #{{ $tag->tag_name }}</a>
                                      @endforeach
@@ -79,12 +81,16 @@
         </div>
         <div class="text-center my-5">
             <a href="{{ route('adminuser.index')}}">
-            <button type='button' class='btn btn-primary'>ホームに戻る</button></a>
+            <button type='button' class='btn btn-primary'>戻る</button></a>
                   
 </div>
 
 
 <style>
+body{
+    background-color: #e86464;
+}
+
     .col-lg-8{
    
    margin: auto;

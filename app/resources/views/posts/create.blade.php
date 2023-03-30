@@ -42,6 +42,15 @@
     </div>
 
     <div class="form-group">
+    <h6><label for="exampleFormControlInput1">場所(都道府県をひとつ選択してください)</label></h6>
+    <select type="text" class="form-control" name='pref'  value="{{old('pref')}}">                          
+    @foreach(config('pref') as $pref => $score)
+        <option value="{{ $score }}">{{ $score }}</option>
+    @endforeach
+</select>
+    </div>
+
+    <div class="form-group">
    <h6><label for="exampleFormControlInput1">タグ(半角#を先頭につけてください)</label></h6>
    <label for="exampleFormControlInput1">※必須項目ではありません。</label><br>
    <input type="text" class="form-control" name="tags" value="{{old('tags')}}">
@@ -61,6 +70,11 @@
                    </div>
 </div>
 
+<style>
+body{
+        background: #DFEFF2;
+    }
+</style>
 
 <script>
   function ShowLength( str ) {

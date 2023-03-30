@@ -149,6 +149,7 @@ return [
     'attributes' => [
         'title'=>'タイトル',
         'image_path'=>'写真',
+        'pref'=>'場所',
         'feelings'=>'本文',
         'tag_name'=>'タグ',
         'image'=>'写真',
@@ -156,6 +157,7 @@ return [
         'name'=>'名前',
         'email'=>'メール',
         'password'=>'パスワード',
+        
     ],
 
 ];

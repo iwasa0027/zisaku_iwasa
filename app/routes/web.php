@@ -50,6 +50,7 @@ Route::get('/bookmarks', [PostController::class, 'bookmark_articles'])->name('bo
 
 
 Route::get('/tagword', [PostController::class, 'tagwords'])->name('tagword');
+Route::get('/basyoword', [PostController::class, 'basyowords'])->name('basyoword');
 });
 
  Route::group(['middleware' => 'auth', 'can:admin_only'], function () {

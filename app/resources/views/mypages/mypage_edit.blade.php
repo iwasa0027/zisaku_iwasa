@@ -67,7 +67,11 @@
   
 
 </div>  
-
+<style>
+body{
+    background-color: #eb8686;
+}
+</style>
 
 <script>
   function ShowLength( str ) {

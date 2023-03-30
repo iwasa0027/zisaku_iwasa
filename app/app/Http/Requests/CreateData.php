@@ -24,12 +24,11 @@ class CreateData extends FormRequest
     public function rules()
     {
         return [
-            'title'=>'required',
+            'title'=>'required|max:50',
             'image_path'=>'required|image|mimes:jpeg,png,jpg,gif',
             'feelings'=>'required|max:500',
-            
             'tag_name'=>'max:100',
-
+            'pref'=>'required',
           
            
         ];

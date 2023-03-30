@@ -35,17 +35,13 @@
        
         <div class="text-center my-5">
                    
-                   <img src="{{ asset('image/bbbbbb.jpg')}}" id="slide_img" class="slider" />
+                   <img src="{{ asset('image/bbbbbb.jpg')}}" id="slide_img" class="slider" width="45%">
                  
                       
                       
                    </div>
                
-<style>
-    img{
-        width: 40%;
-    }
-</style>
+
 <script>
  const img_src = ["{{ asset('image/aaaaa.jpg')}}","{{ asset('image/thumbnail_image005.jpg')}}","{{ asset('image/ccccc.jpg')}}","{{ asset('image/thumbnail_image012.jpg')}}","{{ asset('image/bbbbbb.jpg')}}" ];
       let num = -1;
@@ -94,11 +90,16 @@
                                 <div class="card-body">
                                 <h1 class="card-title h3">{{$product->title}}</h1>
                                     <div class="small text-muted">{{($product->created_at)->format('Y/m/d')}}</div>
+                                    <p class="card-text">場所：{{$product->pref}}</p>
                                    
                                     @foreach($product->tags as $tag)
                                   <a href="{{ route('tagword',['tagword'=>$tag->tag_name])}}"> #{{ $tag->tag_name }}</a>
                                      @endforeach
-                                     
+
+                                                            
+                                   
+                                
+                                                                        
                                      <p class="card-text">{{Str::limit($product->feelings, 20, '…' )}}</p>
                                 
                                     <br><a class="btn btn-primary" href="{{route('posts.show',$product->id)}}"> 記事を読む →</a>
@@ -177,6 +178,7 @@
                             </div>
                         </div>
                     </div>
+                    
                     <!-- Categories widget-->
                     <div class="card mb-4">
                         <div class="card-header">人気ワード検索</div>
@@ -206,6 +208,33 @@
 
 
                     </div>
+
+
+
+ 
+                    <div class="card mb-4">
+                        <div class="card-header">場所から探す</div>
+                        <div class="card-body">
+                            <div class="input-group">
+                         <div>
+                            <form action="{{ route('basyoword') }}" method="GET">
+
+                            <select type="submit"  name='basyoword'  value="@if (isset($basyoword)) {{ $basyoword }} @endif">                         
+                                @foreach(config('pref') as $pref => $score)
+                                    <option value="{{ $score }}">{{ $score }}</option>
+                                @endforeach     <input type="submit" value="検索">
+                            </select>
+                                <!-- <input type="search" name="basyoword" value="@if (isset($basyoword)) {{ $basyoword }} @endif"> -->
+                            </form>
+                            
+                        </div>
+
+                     
+                             
+                            </div>
+                        </div>
+                    </div>
+
 
 
                     <div class="card mb-4">
@@ -256,10 +285,65 @@
         </footer>
     
 
-
+        <div class="pagetop">Topに戻る</div>
 
  </div>
  
+ <style>
+    body{
+        background: #DFEFF2;
+    }
+
+    .pagetop {
+  cursor: pointer;
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  transition: .3s;
+  color: #000080;
+  background: #FF9900;
+  
+/*   デフォルトは非表示 */
+  opacity: 0;
+}
+.pagetop:hover {
+    box-shadow: 0 0 10px #000080;
+}
+
+</style>
+
+<script>
+const pagetop_btn = document.querySelector(".pagetop");
+
+// .pagetopをクリックしたら
+pagetop_btn.addEventListener("click", scroll_top);
+
+// ページ上部へスムーズに移動
+function scroll_top() {
+  window.scroll({ top: 0, behavior: "smooth" });
+}
+
+// スクロールされたら表示
+window.addEventListener("scroll", scroll_event);
+function scroll_event() {
+  if (window.pageYOffset > 100) {
+    pagetop_btn.style.opacity = "1";
+  } else if (window.pageYOffset < 100) {
+    pagetop_btn.style.opacity = "0";
+  }
+}
+
+</script>
+
+
+
+
 @elsecan('admin_only')
 
 
@@ -286,6 +370,11 @@
        </a>
 </div>
 
+<style>
+    body{
+        background: #DFEFF2;
+    }
+</style>
 @endcan
 @endsection
 

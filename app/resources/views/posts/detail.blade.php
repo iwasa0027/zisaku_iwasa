@@ -25,13 +25,7 @@
                                 <div class="card-body">
                                 <h1 class="card-title h3">{{$post['title']}}</h1>
                                     <div class="small text-muted">{{($post['created_at'])->format('Y/m/d')}}　
-                                   
-                             
-
-                                  
-                                
-                                    
-                                    @auth
+                                                   @auth
                                      <!-- //いいねを付ける記述を修正しています -->
                                      @if (!$post->isLikedBy(Auth::user()))
                                      <span class="likes">
@@ -46,12 +40,21 @@
                                     @endif
                                     @endauth
                                     @guest
+                                
+                                   
+                             
+
+                                  
+                                
+                                    
+                         
                                     <span class="likes">
                                         <i class="fa-solid fa-star heart"></i>
                                         <span class="like-counter">{{$post->likes_count}}</span>
                                     </span><!-- /.likes -->
                                     @endguest
                                     </div>
+                                    <p class="card-text">場所：{{$post->pref}}</p>
                                     @foreach($post->tags as $tag)
                                   <a href="#!"> #{{ $tag->tag_name }}</a>
                                      @endforeach
@@ -82,6 +85,10 @@
 .icon{
     color: yellow;
 }
+
+body{
+        background: #DFEFF2;
+    }
 </style>
 
 @endsection()

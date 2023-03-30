@@ -49,7 +49,7 @@
                                 <div class="card-body">
                                 <h1 class="card-title h3">{{$post->title}}</h1>
                                     <div class="small text-muted">{{($post->created_at)->format('Y/m/d')}}</div>
-                                   
+                                    <p class="card-text">場所：{{$post->pref}}</p>
                                     @foreach($post->tags as $tag)
                                   <a href="#!"> #{{ $tag->tag_name }}</a>
                                      @endforeach
@@ -94,9 +94,14 @@
             </div>
         </div>
 </div>
-
+<div class="pagetop">Topに戻る</div>
                   
 <style>
+body{
+    background-color: #e86464;
+}
+
+
       .card-text{
             margin-top: 10px;
         }
@@ -147,8 +152,54 @@ font-size:16px;
 .profile_box p {
 padding: 15px 20px;
 margin: 0;
+
 }
 
-
+.pagetop {
+  cursor: pointer;
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  transition: .3s;
+  color: #000080;
+  background: #33FF00;
+  
+/*   デフォルトは非表示 */
+  opacity: 0;
+}
+.pagetop:hover {
+    box-shadow: 0 0 10px #000080;
+}
 </style>
+
+
+<script>
+const pagetop_btn = document.querySelector(".pagetop");
+
+// .pagetopをクリックしたら
+pagetop_btn.addEventListener("click", scroll_top);
+
+// ページ上部へスムーズに移動
+function scroll_top() {
+  window.scroll({ top: 0, behavior: "smooth" });
+}
+
+// スクロールされたら表示
+window.addEventListener("scroll", scroll_event);
+function scroll_event() {
+  if (window.pageYOffset > 100) {
+    pagetop_btn.style.opacity = "1";
+  } else if (window.pageYOffset < 100) {
+    pagetop_btn.style.opacity = "0";
+  }
+}
+
+</script>
+
 @endsection 

@@ -135,6 +135,7 @@ class PostController extends Controller
      
         $post->user_id=Auth::id();
         $post->title = $request->title;
+        $post->pref = $request->pref;
         //$article->image_path = $request->image_path;
         $post->feelings = $request->feelings;
 
@@ -215,7 +216,7 @@ class PostController extends Controller
   $post->image_path = 'storage/' . $dir . '/' . $file_name;
 
         $post->title = $request->title;
-        //$article->image_path = $request->image_path;
+        $post->pref = $request->pref;
         $post->feelings = $request->feelings;
         $post->save();
         $post->tags()->sync($tags_id); //ここが重要です。
@@ -290,4 +291,41 @@ class PostController extends Controller
         ]);
     }
 
+    public function basyowords(Request $request)
+    {
+        
+  
+
+        $sort=$request->sort;
+        $posts = Post::orderBy('created_at', 'desc')->paginate(5);
+       
+        $basyoword = $request->input('basyoword');
+       
+        $query = Post::query();
+        if($basyoword) {
+            // $query->where('title', 'LIKE', "%{$keyword}%")
+            //     ->orWhere('feelings', 'LIKE', "%{$keyword}%");
+
+             // 全角スペースを半角に変換
+            $spaceConversion = mb_convert_kana($basyoword, 's');
+
+            // 単語を半角スペースで区切り、配列にする（例："山田 翔" → ["山田", "翔"]）
+            $wordArraySearched = preg_split('/[\s,]+/', $spaceConversion, -1, PREG_SPLIT_NO_EMPTY);
+
+
+            // 単語をループで回し、ユーザーネームと部分一致するものがあれば、$queryとして保持される
+            foreach($wordArraySearched as $value) {
+                $query->where('pref', 'like', '%'.$value.'%');
+            }
+            $posts = $query->orderBy('created_at', 'desc')->paginate(5);
+        }
+
+            return view('posts.basyoword')
+            ->with([
+                'posts' => $posts,
+                'basyoword' => $basyoword,
+                'sort'=>$sort,
+            ]);
+        }
+    
 }

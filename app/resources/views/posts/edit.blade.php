@@ -38,6 +38,15 @@
     </div>
 
     <div class="form-group">
+    <h6><label for="exampleFormControlInput1">場所(都道府県をひとつ選択してください)</label></h6>
+    <select type="text" class="form-control" name='pref'  value="{{$post->pref}}">                          
+    @foreach(config('pref') as $pref => $score)
+        <option value="{{ $score }}">{{ $score }}</option>
+    @endforeach
+</select>
+    </div>
+
+    <div class="form-group">
     <h6><label for="exampleFormControlInput1">タグ</label></h6>
    <input type="text" class="form-control" name="tags" value="@foreach($post->tags as $tag) #{{ $tag->tag_name }} @endforeach">
  </div>
@@ -69,6 +78,12 @@
  
 </div>
 </div>
+
+<style>
+body{
+        background: #DFEFF2;
+    }
+</style>
 
 <script>
   function ShowLength( str ) {
